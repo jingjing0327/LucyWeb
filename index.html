@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<meta charset="utf-8">
+  <meta Access-Control-Allow-Origin="*">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+	<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+
+	<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<meta charset="UTF-8">
+	<title>电影小站</title>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="">电影小站</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="">Dashboard</a></li>
+            <li><a href="">Settings</a></li>
+            <li><a href="">Profile</a></li>
+            <li><a href="">Help</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active">
+            <a href="">電影</a></li>
+            <li id="vide_name"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <h1 class="page-header">電影</h1>
+      <video src="http://ali-hlsgslb.wasu.tv/data9/ott/344/2013-04/27/1367058808648_657980/playlist.m3u8?action=hls&Contentid=CP23010020130323080103" controls="controls">
+      your browser does not support the video tag
+      </video>
+
+
+
+    </div>
+
+
+    <script>
+      var time=new Date().getTime();
+      var t_encode=time* 6 + 1991 + 327 + 511 + 2537;
+      var html = ''
+
+      $.ajax({
+        type: "get",
+        url: "http://localhost:8080/LucyTV/VideoServlet",
+        data: {"time":time,
+              "t_encode":t_encode,
+              "pageNo":0},
+        async: false,
+        dataType: "json",
+            success: function(data) {
+              for (var i = 0; i < data.length; i++) {
+              html+='<a href='+data[i]['uuid']+'>'+data[i]['name']+'</a>'
+            }
+             $('#vide_name').html(html)
+          }
+    })
+    </script>
+</body>
+</html>
