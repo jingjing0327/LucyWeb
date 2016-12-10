@@ -27,7 +27,11 @@
   <!-- voide.js hls. -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/4.0.2/videojs-contrib-hls.js"></script>
 
-  
+  <script>
+    <!--支持播放flv -->
+    videojs.options.flash.swf = "video-js.swf";
+  </script>
+ 
 	<meta charset="UTF-8">
 	<title>电影小站</title>
 </head>
@@ -74,8 +78,9 @@
       <h1 class="page-header">電影</h1>
       <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" width="1000" height="563"
         poster="png/MY_VIDEO_POSTER.png" data-setup="{}">
-      <source src="http://chyd-wsvod.wasu.tv/data14/ott/344/2015-08/21/1440154658309_123476/playlist.m3u8"
-       type='application/x-mpegURL'>
+      <source src="http://cn-sdyt-cu-v-01.acgvideo.com/vg5/4/60/3876153-1.mp4?expires=1481390100&ssig=w0Vgo61lEKJmIbwd5Dwu2A
+&oi=1875266260&nfa=fEJR5SwTufBq6SzosbG8Uw==&dynamic=1&d=2763000"
+       type='video/x-flv'>
       <p class="vjs-no-js">
         To view this video please enable JavaScript, and consider upgrading to a web browser that
         <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
