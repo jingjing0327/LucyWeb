@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+<meta charset="utf-8">
+<meta Access-Control-Allow-Origin="*">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet"
+	href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+<!-- video.js -->
+<link href="http://vjs.zencdn.net/5.8.8/video-js.css" rel="stylesheet">
+
+<!-- voide.js -->
+<script src="http://vjs.zencdn.net/5.8.8/video.js"></script>
+
+<!-- voide.js hls. -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/4.0.2/videojs-contrib-hls.js"></script>
+
+<meta charset="UTF-8">
+<title>电影小站</title>
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="">电影小站</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="">Dashboard</a></li>
+					<li><a href="">Settings</a></li>
+				</ul>
+				<form class="navbar-form navbar-right">
+					<input type="text" class="form-control" placeholder="Search...">
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li class="active"><a href="">電影</a></li>
+					<li id="vide_name"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		<h1 class="page-header">電影</h1>
+		<video id="my-video" class="video-js" controls preload="auto"
+			width="720" height="360" poster="png/MY_VIDEO_POSTER.png"
+			data-setup='{ "aspectRatio":"640:320"}'>
+			<source
+				src="http://111.206.109.176/youku/6571D6488574A83CA7B69856A0/0300200100584BCC9BDC592D9B7D2FE37E0E47-5D5C-6B27-754A-E354B9BD9D96.mp4"
+				type='video/mp4'>
+			<p class="vjs-no-js">
+				To view this video please enable JavaScript, and consider upgrading
+				to a web browser that <a
+					href="http://videojs.com/html5-video-support/" target="_blank">supports
+					HTML5 video</a>
+			</p>
+		</video>
+	</div>
+
+	<script>
+		function video_click(uuid) {
+			var time = new Date().getTime();
+			var t_encode = time * 6 + 1991 + 327 + 511 + 2537;
+			$.ajax({
+				type : "get",
+				url : "http://115.28.66.229/VideoUrlServlet",
+				data : {
+					"time" : time,
+					"t_encode" : t_encode,
+					"uuid" : uuid
+				},
+				async : false,
+				dataType : "json",
+				success : function(data) {
+					console.log(data[0]['url']);
+					getUrlFun(data[0]['url']);
+				}
+			})
+		}
+
+		function getUrlFun(url) {
+			var time = new Date().getTime();
+			var t_encode = time * 6 + 1991 + 327 + 511 + 2537;
+			$.ajax({
+				type : "get",
+				url : "http://115.28.66.229/VideoRealUrlsServlet",
+				data : {
+					"time" : time,
+					"t_encode" : t_encode,
+					"url" : url
+				},
+				async : false,
+				dataType : "json",
+				success : function(data) {
+					console.log(data)
+					
+					
+					
+				}
+			})
+		}
+
+		var time = new Date().getTime();
+		var t_encode = time * 6 + 1991 + 327 + 511 + 2537;
+		var html = ''
+
+		$.ajax({
+			type : "get",
+			url : "http://115.28.66.229/VideoServlet",
+			data : {
+				"time" : time,
+				"t_encode" : t_encode,
+				"pageNo" : 0
+			},
+			async : false,
+			dataType : "json",
+			success : function(data) {
+				for (var i = 0; i < data.length; i++) {
+					var xx = data[i]['uuid']
+					//data[i]['uuid']
+					html += '<a href=javascript:video_click("' + xx + '");>'
+							+ data[i]['name'] + '</a>'
+				}
+				$('#vide_name').html(html)
+			}
+		})
+	</script>
+</body>
+</html>
