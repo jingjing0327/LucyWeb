@@ -3,7 +3,6 @@
 
 <head>
 <meta charset="utf-8">
-<meta Access-Control-Allow-Origin="*">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 新 Bootstrap 核心 CSS 文件 -->
@@ -28,6 +27,12 @@
 <!-- voide.js hls. -->
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/4.0.2/videojs-contrib-hls.js"></script>
+
+<!--hot key  -->
+<link rel="stylesheet/less" type="text/css" href="css/videojs-playlist-ui.vertical.less" />
+<script src="//cdn.sc.gl/videojs-hotkeys/latest/videojs.hotkeys.min.js"></script>
+<script src="js/videojs-playlist.min.js"></script>
+<script src="js/videojs-playlist-ui.test.js"></script>
 
 <meta charset="UTF-8">
 <title>电影小站</title>
@@ -63,7 +68,7 @@
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
 					<li class="active"><a href="">電影</a></li>
-					<li id="vide_name"></li>
+					<li id="video_name"></li>
 				</ul>
 			</div>
 		</div>
@@ -72,19 +77,23 @@
 
 	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 		<h1 class="page-header">電影</h1>
-		<video id="my-video" class="video-js" controls preload="auto"
-			width="720" height="360" poster="png/MY_VIDEO_POSTER.png"
-			data-setup='{ "aspectRatio":"640:320"}'>
-			<source
-				src="http://111.206.109.71/youku/6976DD385844E83FFA715A4DEF/0300200100584E63157CBD1C3C95F223D10140-4195-1557-DB7E-ED05E02A43D0.mp4"
-				type='video/mp4'>
-			<p class="vjs-no-js">
-				To view this video please enable JavaScript, and consider upgrading
-				to a web browser that <a
-					href="http://videojs.com/html5-video-support/" target="_blank">supports
-					HTML5 video</a>
-			</p>
-		</video>
+					<ol class="vjs-playlist"></ol>
+		<div id="video_main">
+			<video id="my-video" class="video-js" controls preload="auto"
+				width="720" height="360" poster="png/MY_VIDEO_POSTER.png"
+				data-setup='{"aspectRatio":"720:360"}'>
+				<!-- <source id="my_video_sourse"
+				src="http://cn-sdjn-cu-v-08.acgvideo.com/vg4/c/9f/12350455-1.flv?expires=1481893200&ssig=4b7g55wn2Fd9MlN_neMhVA&oi=1875266260&rate=2400000&d=310334"
+				type='video/x-flv'> -->
+				<p class="vjs-no-js">
+					To view this video please enable JavaScript, and consider upgrading
+					to a web browser that <a
+						href="http://videojs.com/html5-video-support/" target="_blank">supports
+						HTML5 video</a>
+				</p>
+			</video>
+
+		</div>
 	</div>
 
 	<script>
@@ -102,10 +111,12 @@
 				async : false,
 				dataType : "json",
 				success : function(data) {
-					console.log(data[0]['url']);
-					getUrlFun(data[0]['url']);
+					//console.log(data[0]['url']);
+					console.log("22222222222222");
+					//getUrlFun(data[0]['url']);
+					getUrlFun('http://www.bilibili.com/video/av7539260/');
 				}
-			})
+			});
 		}
 
 		function getUrlFun(url) {
@@ -120,14 +131,31 @@
 					"url" : url
 				},
 				async : false,
-				dataType : "json",
+				dataType : "text",
 				success : function(data) {
-					console.log(data)
+					console.log("1111111111111111");
+					console.log(data);
+
+					/* var u="http://cn-sxty2-cu.acgvideo.com/vg7/c/63/12350455-1-hd.mp4?expires=1481893200&ssig=AhaHJU6xy6aY5hg2UuqCxA&oi=1875266260&nfa=jh1gYOK5yu5onKTDA7JgFw==&dynamic=1&d=1336876";
+
+					var html_video='<video id="my-video" class="video-js" controls preload="auto"'+
+						'width="720" height="360" poster="png/MY_VIDEO_POSTER.png"'+
+							'data-setup={"aspectRatio":"720:360"}>'+
+							'<source id="my_video_sourse"'+
+								'src="'+u+'"'+
+								'type="video/mp4">'+
+							'<p class="vjs-no-js"></p></video>'
 					
-					
-					
+					$("#video_main").html(html_video); */
+
+					//var myPlayer =  videojs("my-video");  //初始化视频
+					//myPlayer.load(u);  //使video重新加载
+				},
+				error : function(data) {
+					console.log("error---" + data.data);
+					console.log(textStatus + "");
 				}
-			})
+			});
 		}
 
 		var time = new Date().getTime();
@@ -151,9 +179,59 @@
 					html += '<a href=javascript:video_click("' + xx + '");>'
 							+ data[i]['name'] + '</a>'
 				}
-				$('#vide_name').html(html)
+				$('#video_name').html(html)
 			}
-		})
+		});
+		/* hot key */
+		videojs('my-video').ready(function() {
+			this.hotkeys({
+				volumeStep : 0.1,
+				seekStep : 5,
+				enableModifiersForNumbers : false
+			});
+		});
+		
+		/*  */
+		var player = videojs('my-video');
+		player.playlist([{
+			name: 'Disney\'s Oceans 1',
+		      description: 'Explore the depths of our planet\'s oceans. ' +
+		        'Experience the stories that connect their world to ours. ' +
+		        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+		        'sed do eiusmod tempor incididunt ut labore et dolore magna ' +
+		        'aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco ' +
+		        'laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure ' +
+		        'dolor in reprehenderit in voluptate velit esse cillum dolore eu ' +
+		        'fugiat nulla pariatur. Excepteur sint occaecat cupidatat non ' +
+		        'proident, sunt in culpa qui officia deserunt mollit anim id est ' +
+		        'laborum.',
+		      duration: 45,
+		  sources: [{
+		    src: 'http://cn-sdjn-cu-v-01.acgvideo.com/vg4/c/53/12363249-1.flv?expires=1481907900&ssig=bJsbVXMHmQpZ3VjCGEJy8g&oi=1875266260&nfa=jh1gYOK5yu5onKTDA7JgFw==&dynamic=1&d=300328',
+		    type: 'video/x-flv'
+		  }],
+		}, {
+			name: 'Disney\'s Oceans 1',
+		      description: 'Explore the depths of our planet\'s oceans. ' +
+		        'Experience the stories that connect their world to ours. ' +
+		        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+		        'sed do eiusmod tempor incididunt ut labore et dolore magna ' +
+		        'aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco ' +
+		        'laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure ' +
+		        'dolor in reprehenderit in voluptate velit esse cillum dolore eu ' +
+		        'fugiat nulla pariatur. Excepteur sint occaecat cupidatat non ' +
+		        'proident, sunt in culpa qui officia deserunt mollit anim id est ' +
+		        'laborum.',
+		      duration: 45,
+		  sources: [{
+		    src: 'http://cn-sdjn-cu-v-02.acgvideo.com/vg2/9/ee/12363249-1-hd.mp4?expires=1481907900&ssig=7WgaWBNg6or3bRZTB6arrg&oi=1875266260&rate=2400000&d=1106183',
+		    type: 'video/mp4'
+		  }],
+		}]);
+		// Play through the playlist automatically.
+		//player.playlist.autoadvance(0);
+		player.playlistUi();
+		
 	</script>
 </body>
 </html>
