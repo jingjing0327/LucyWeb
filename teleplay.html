@@ -20,27 +20,20 @@
 <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
 <!-- video.js -->
-<link
-	href="https://cdnjs.cloudflare.com/ajax/libs/video.js/5.15.1/alt/video-js-cdn.min.css"
-	rel="stylesheet">
+<link href="http://vjs.zencdn.net/5.8.8/video-js.css" rel="stylesheet">
 
 <!-- voide.js -->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/video.js/5.15.1/video.min.js"></script>
-
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/video.js/5.15.1/lang/zh-CN.js"></script>
+<script src="http://vjs.zencdn.net/5.8.8/video.js"></script>
 
 <!-- voide.js hls. -->
 <script
-	src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/4.0.3/videojs-contrib-hls.js"></script>
+	src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/4.0.2/videojs-contrib-hls.js"></script>
 
 <!--hot key  -->
 <link rel="stylesheet/less" type="text/css"
 	href="css/videojs-playlist-ui.vertical.less" />
 <script src="//cdn.sc.gl/videojs-hotkeys/latest/videojs.hotkeys.min.js"></script>
 <script src="js/videojs-playlist.min.js"></script>
-
 
 <meta charset="UTF-8">
 <title>电影小站</title>
@@ -49,11 +42,9 @@
 .pull-right {
 	float: right !important;
 }
-
-.choose_span {
+.choose_span{
 	background-color: #428bca;
 }
-
 #video_ppppp {
 	position: absolute;
 	z-index: 999;
@@ -127,15 +118,16 @@
 			<div id="video_ppppp" role="menu">
 				<!-- <span class="active"><a href="#">第一集</a></span>
 				<span ><a href="#">第一集</a></span> -->
+
 			</div>
 		</div>
 		<div id="video_main">
 			<video id="my-video" class="video-js" controls preload="auto"
 				width="720" height="360" poster="png/MY_VIDEO_POSTER.png"
-				data-setup='{"aspectRatio":"720:360","techOrder":["flash"]}'>
-	<source id="my_video_sourse"
-					src="http://111.206.109.142/youku/6775EEAEEE73C831061D42688C/030020010058609179B1702D9B7D2F581BAEE8-2066-A82C-FCCB-AFA8D2C4DCB6.mp4"
-					type='video/mp4' /> 
+				data-setup='{"aspectRatio":"720:360"}'>
+				<!-- <source id="my_video_sourse"
+				src="http://cn-sdjn-cu-v-08.acgvideo.com/vg4/c/9f/12350455-1.flv?expires=1481893200&ssig=4b7g55wn2Fd9MlN_neMhVA&oi=1875266260&rate=2400000&d=310334"
+				type='video/x-flv'> -->
 				<p class="vjs-no-js">
 					To view this video please enable JavaScript, and consider upgrading
 					to a web browser that <a
@@ -147,7 +139,6 @@
 	</div>
 
 	<script>
-	
 		var video_data;
 		var player = videojs('my-video');
 		var server_url = "http://115.28.66.229/"
@@ -175,35 +166,16 @@
 			video_data = data;
 			var aa = [];
 			var srcs = data.src;
-			var videoType = judgeType(data.container);
-			console.log("videoType===>>" + videoType);
-			console.log("data.container===>>" + data.container);
 			for (var i = 0; i < srcs.length; i++) {
 				aa.push({
 					sources : [ {
 						src : srcs[i],
-						type : videoType
+						type : 'video/x-flv'
 					} ]
 				});
 			}
 			player.playlist(aa);
 			player.playlist.autoadvance(0);
-		}
-
-		function judgeType(beforType) {
-			var afterType = "video/x-flv";
-			switch (beforType) {
-			case "mp4":
-				afterType = "video/mp4";
-				break;
-			case "flv":
-				afterType = "video/x-flv";
-				break;
-			case "m3u8":
-				afterType = "application/x-mpegURL";
-				break;
-			}
-			return afterType;
 		}
 
 		function set_split_video() {
@@ -215,8 +187,8 @@
 					lixx = "<li class='active'>"
 				} */
 				var tempi = i + 1;
-				html += '<span class="choose_span"><a href="javascript:play_auto_split('
-						+ i + ')">第' + tempi + '段</a></span>';
+				html += '<span class="choose_span"><a href="javascript:play_auto_split(' + i
+						+ ')">第' + tempi + '段</a></span>';
 			}
 			$('#video_ppppp').html(html)
 		}
@@ -226,18 +198,6 @@
 			var ppp = player.playlist.currentItem(position);
 			console.log(ppp);
 		}
-/* 	
- 		var player = videojs('my-video');
-
-		player.src({
-		  src: "http://111.206.109.142/youku/6775EEAEEE73C831061D42688C/030020010058609179B1702D9B7D2F581BAEE8-2066-A82C-FCCB-AFA8D2C4DCB6.mp4",
-		  type: 'video/mp4',
-		});
-		
-		player.play();
-		 */
-		
-
 
 		var time = new Date().getTime();
 		var t_encode = time * 6 + 1991 + 327 + 511 + 2537;
@@ -264,9 +224,6 @@
 				$('#video_name').html(html)
 			}
 		});
-		var player = videojs('my-video');
-		player.play();
-
 		/* hot key */
 		videojs('my-video').ready(function() {
 			this.hotkeys({
