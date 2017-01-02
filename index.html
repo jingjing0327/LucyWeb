@@ -41,6 +41,7 @@
 <script src="//cdn.sc.gl/videojs-hotkeys/latest/videojs.hotkeys.min.js"></script>
 <script src="js/videojs-playlist.min.js"></script>
 
+<script type="text/javascript" src="js/swfobject.js"></script>
 
 <meta charset="UTF-8">
 <title>电影小站</title>
@@ -124,157 +125,17 @@
 				该 视 频 分 段 <span class="caret"></span>
 			</button>
 
-			<div id="video_ppppp" role="menu">
-				<!-- <span class="active"><a href="#">第一集</a></span>
-				<span ><a href="#">第一集</a></span> -->
-			</div>
+			<div id="video_ppppp" role="menu"></div>
 		</div>
+		<div id="video_main_complex"></div>
 		<div id="video_main">
-			<video id="my-video" class="video-js" controls preload="auto"
-				width="720" height="360" poster="png/MY_VIDEO_POSTER.png"
-				data-setup='{"aspectRatio":"720:360","techOrder":["flash"]}'>
-	<source id="my_video_sourse"
-					src="http://111.206.109.142/youku/6775EEAEEE73C831061D42688C/030020010058609179B1702D9B7D2F581BAEE8-2066-A82C-FCCB-AFA8D2C4DCB6.mp4"
-					type='video/mp4' /> 
-				<p class="vjs-no-js">
-					To view this video please enable JavaScript, and consider upgrading
-					to a web browser that <a
-						href="http://videojs.com/html5-video-support/" target="_blank">supports
-						HTML5 video</a>
-				</p>
-			</video>
+			<video id="my-video" class="video-js vjs-big-play-centered" controls
+				preload="auto" width="720" height="360"
+				poster="png/MY_VIDEO_POSTER.png"
+				data-setup='{"aspectRatio":"720:360"}'></video>
 		</div>
 	</div>
 
-	<script>
-	
-		var video_data;
-		var player = videojs('my-video');
-		var server_url = "http://115.28.66.229/"
-		function video_click(uuid, video_name) {
-			$('#video_title_name').html(video_name)
-			var time = new Date().getTime();
-			var t_encode = time * 6 + 1991 + 327 + 511 + 2537;
-			$.ajax({
-				type : "get",
-				url : server_url + "VideoRealUrlPreferredServlet",
-				data : {
-					"time" : time,
-					"t_encode" : t_encode,
-					"uuid" : uuid
-				},
-				async : false,
-				dataType : "json",
-				success : function(data) {
-					settingUrl(data);
-				}
-			});
-		}
-
-		function settingUrl(data) {
-			video_data = data;
-			var aa = [];
-			var srcs = data.src;
-			var videoType = judgeType(data.container);
-			console.log("videoType===>>" + videoType);
-			console.log("data.container===>>" + data.container);
-			for (var i = 0; i < srcs.length; i++) {
-				aa.push({
-					sources : [ {
-						src : srcs[i],
-						type : videoType
-					} ]
-				});
-			}
-			player.playlist(aa);
-			player.playlist.autoadvance(0);
-		}
-
-		function judgeType(beforType) {
-			var afterType = "video/x-flv";
-			switch (beforType) {
-			case "mp4":
-				afterType = "video/mp4";
-				break;
-			case "flv":
-				afterType = "video/x-flv";
-				break;
-			case "m3u8":
-				afterType = "application/x-mpegURL";
-				break;
-			}
-			return afterType;
-		}
-
-		function set_split_video() {
-			$("#video_ppppp").toggle();
-			var html = '';
-			for (var i = 0; i < video_data.src.length; i++) {
-				/* var lixx = "<li>"
-				if (i == player.playlist.currentItem()) {
-					lixx = "<li class='active'>"
-				} */
-				var tempi = i + 1;
-				html += '<span class="choose_span"><a href="javascript:play_auto_split('
-						+ i + ')">第' + tempi + '段</a></span>';
-			}
-			$('#video_ppppp').html(html)
-		}
-
-		function play_auto_split(position) {
-			console.log(position);
-			var ppp = player.playlist.currentItem(position);
-			console.log(ppp);
-		}
-/* 	
- 		var player = videojs('my-video');
-
-		player.src({
-		  src: "http://111.206.109.142/youku/6775EEAEEE73C831061D42688C/030020010058609179B1702D9B7D2F581BAEE8-2066-A82C-FCCB-AFA8D2C4DCB6.mp4",
-		  type: 'video/mp4',
-		});
-		
-		player.play();
-		 */
-		
-
-
-		var time = new Date().getTime();
-		var t_encode = time * 6 + 1991 + 327 + 511 + 2537;
-		var html = ''
-
-		$.ajax({
-			type : "get",
-			url : server_url + "VideoServlet",
-			data : {
-				"time" : time,
-				"t_encode" : t_encode,
-				"pageNo" : 0
-			},
-			async : false,
-			dataType : "json",
-			success : function(data) {
-				for (var i = 0; i < data.length; i++) {
-					var xx = data[i]['uuid']
-					//data[i]['uuid']
-					html += '<a href=javascript:video_click("' + xx + '","'
-							+ data[i]['name'] + '");>' + data[i]['name']
-							+ '</a>'
-				}
-				$('#video_name').html(html)
-			}
-		});
-		var player = videojs('my-video');
-		player.play();
-
-		/* hot key */
-		videojs('my-video').ready(function() {
-			this.hotkeys({
-				volumeStep : 0.1,
-				seekStep : 5,
-				enableModifiersForNumbers : false
-			});
-		});
-	</script>
+	<script src="js/function_handler.js"></script>
 </body>
 </html>
